@@ -2,9 +2,8 @@ from django.shortcuts import render,HttpResponse, redirect
 from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
-nextId = 2
+nextId = 1
 inputNum = [
-  {'id':1,'answer':'뭐라고 하지'}
 ]
 
 def HTMLTemplate(content):
@@ -19,6 +18,8 @@ def HTMLTemplate(content):
 
 
 def index(request): # '''긴 문자열 입력'''
+  global inputNum
+  inputNum = []
   start = '<a href="/create/">시작하기</a>'
   return HttpResponse(HTMLTemplate(start))
 
@@ -52,7 +53,6 @@ def create(request):
     newInputNum = {"id":nextId, "answer":gameNum}
     inputNum.append(newInputNum)
     if answerNumber == gameNum:
-      print("정답")
       return redirect('/')
     url = '/create/'
     nextId = nextId + 1
