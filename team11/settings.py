@@ -11,18 +11,21 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import environ, os
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # 컴네 외부ip gitignore에 올리기
 # 참고 블로그 : 
 # https://alicecampkin.medium.com/how-to-set-up-environment-variables-in-django-f3c4db78c55f 얘는 .env 파일 위치가 최상단이 아님 왜지
 # https://tler.tistory.com/326
-import environ, os
 
+# env = environ.Env()
 env = environ.Env(DEBUG=(bool,False))
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# environ.Env.read_env()
 environ.Env.read_env(env_file = os.path.join(BASE_DIR,'.env'))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/

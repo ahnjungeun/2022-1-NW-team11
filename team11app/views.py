@@ -1,10 +1,10 @@
 from django.shortcuts import render,HttpResponse, redirect
 from django.views.decorators.csrf import csrf_exempt
+import random
 # Create your views here.
 
 nextId = 1
-inputNum = [
-]
+inputNum = []
 
 def HTMLTemplate(content):
   return f'''
@@ -16,48 +16,62 @@ def HTMLTemplate(content):
     </html>
   '''
 
-
 def index(request): # '''긴 문자열 입력'''
   global inputNum
   inputNum = []
   start = '<a href="/create/">시작하기</a>'
   return HttpResponse(HTMLTemplate(start))
 
-
-@csrf_exempt
-def create(request):
-
+def showList():
   global inputNum
   inputList = ''
   if inputNum != None:
     for userInput in inputNum:
-      inputList += f'<li>{userInput["id"]} {userInput["answer"]}</li>'
+      inputList += f'<li>{userInput["id"]}번째 {userInput["answer"]} {userInput["desc"]}</li>'
   intro = f'''
       <p>입력한 숫자:</p>
       {inputList}
     '''
+  return intro
+  
+@csrf_exempt
+def create(request):
 
+  intro = showList()
+  # answerNumber = random.randint(100, 999)
   answerNumber = 123
 
-  global nextId
+  global nextId, inputNum
   if request.method == 'GET':
     article = '''
         <form action="/create/" method="post">
-            <p><input type="text" name="gameNum" placeholder="title"></p>
+            <p><input type="text" name="userNum" placeholder="title"></p>
             <p><input type="submit"></p>
         </form>
     '''
     return HttpResponse(HTMLTemplate(intro+article))
   elif request.method == 'POST':
-    gameNum = int(request.POST['gameNum'])
-    newInputNum = {"id":nextId, "answer":gameNum}
+    userNum = int(request.POST['userNum'])
+    newInputNum = {"id":nextId, "answer":userNum, "desc":"우잉"}
     inputNum.append(newInputNum)
-    if answerNumber == gameNum:
-      return redirect('/')
-    url = '/create/'
+    
+    if answerNumber == YaguGame(answerNumber,userNum):
+    # if answerNumber == userNum:
+      article = '''
+        <p>정답입니다.</p>
+        <a href="/create">다시 시작하기</a>
+      '''
+      intro = showList()
+      inputNum = []
+      return HttpResponse(HTMLTemplate(intro+article))
     nextId = nextId + 1
+    url = '/create/'
     return redirect(url)
 
+# 여기 수정해주세요.
+def YaguGame(answerNum,userNum):
+  if answerNum == userNum:
+    return 123
 
 
 
