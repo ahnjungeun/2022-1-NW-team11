@@ -52,10 +52,10 @@ def create(request):
     return HttpResponse(HTMLTemplate(intro+article))
   elif request.method == 'POST':
     userNum = int(request.POST['userNum'])
-    newInputNum = {"id":nextId, "answer":userNum, "desc":"우잉"}
+    newInputNum = {"id":nextId, "answer":userNum, "desc":YaguGame(answerNumber,userNum)}
     inputNum.append(newInputNum)
     
-    if answerNumber == YaguGame(answerNumber,userNum):
+    if "3s" == YaguGame(answerNumber,userNum):
     # if answerNumber == userNum:
       article = '''
         <p>정답입니다.</p>
@@ -63,6 +63,7 @@ def create(request):
       '''
       intro = showList()
       inputNum = []
+      nextId = 1
       return HttpResponse(HTMLTemplate(intro+article))
     nextId = nextId + 1
     url = '/create/'
@@ -71,7 +72,10 @@ def create(request):
 # 여기 수정해주세요.
 def YaguGame(answerNum,userNum):
   if answerNum == userNum:
-    return 123
+    resultStr = "3s"
+  else:
+    resultStr = "정답 아님"
+  return resultStr
 
 
 
